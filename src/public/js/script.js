@@ -1,9 +1,11 @@
 "use strict";
 
+const inputUserId = document.getElementById('inputEmail');
 const inputUsername = document.getElementById('inputUsername');
 const inputPassword = document.getElementById('inputPassword');
 const confirmPassword = document.getElementById('confirmPassword');
 
+inputUserId.addEventListener('keyup', emailCheck);
 inputUsername.addEventListener('keyup', checkValidation);
 inputPassword.addEventListener('keyup', checkValidation);
 confirmPassword.addEventListener('keyup', checkValidation);
@@ -12,11 +14,23 @@ function isValid (resDataProp, validator) {
   if (resDataProp) {
     if ((validator.min <= resDataProp) && (resDataProp <= validator.max)) {
       validator.selector.innerHTML = `유효합니다.`;
-      validator.selector.style.color = `rgba(90 187 83)`
+      validator.selector.style.color = `rgba(90 187 83)`;
     } else {
       validator.selector.innerHTML = `${validator.min} ~ ${validator.max}자이어야 합니다.`;
       validator.selector.style.color = `rgba(233 50 35)`;
     }  
+  }
+}
+const emailReg = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+
+// email 유효성 검사
+function emailCheck() {
+  if (emailReg.test(inputUserId.value) === true) {
+    document.querySelector('.userId').innerHTML = `유효합니다.`;
+    document.querySelector('.userId').style.color = `rgba(90 187 83)`;
+  } else {
+    document.querySelector('.userId').innerHTML = `이메일 형식이 올바르지 않습니다.`;
+    document.querySelector('.userId').style.color = `rgba(233 50 35)`;
   }
 }
 
@@ -76,8 +90,8 @@ function checkValidation () {
   });
   //닉네임, 비밀번호, 확인 일치 >> 동의하고 시작하기 버튼 활성화
   const btnActive = document.querySelector('.btn-primary');
-
-  if ((usernameLength >= 2 && usernameLength <= 16) && (ipw.length >= 8 && ipw.length <= 20) && isSamePw) {
+  
+  if ((usernameLength >= 2 && usernameLength <= 16) && (ipw.length >= 8 && ipw.length <= 20) && isSamePw && (emailReg.test(inputUserId.value) === true)) {
     btnActive.disabled = false;
   } else {
     btnActive.disabled = true;
